@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:push_notification/services/notifications_service.dart';
 
 import '../pages/home_page.dart';
 import '../pages/login_page.dart';
@@ -17,6 +18,7 @@ class AuthenticationWrapper extends StatelessWidget {
         return Center(child: CircularProgressIndicator(),);
       }
       else {if(snapshot.hasData){
+        LocalNotificationService().uploadFcmToken();
         return HomePage(user: snapshot.data!);
       }
        else{return LoginPage();}

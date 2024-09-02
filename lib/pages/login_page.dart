@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
@@ -11,6 +12,21 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  signInWithEmailAndPassword()async {
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+
+    }
+    on FirebaseAuthException catch (e) {
+      if(e.code == 'user-not-found'){
+        print('No user found for that email. ');
+      }
+      else if(e.code == 'wrong-password'){
+        print('Wrong password provided for that user. ');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 10,),
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(onPressed: (){}, child: const Text("Login")),
+                child: ElevatedButton(onPressed: signInWithEmailAndPassword,
+                    child: const Text("Login")),
               ),
             ],
           ),
